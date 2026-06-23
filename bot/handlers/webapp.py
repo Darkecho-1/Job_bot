@@ -10,7 +10,7 @@ async def open_webapp(message: Message):
     # ВАЖНО: замените URL на ваш реальный адрес, где будет hosted index.html
     # Например: https://ваш-сайт.com/app
     # Или для локального теста можно использовать ngrok
-    APP_URL = "https://example.com"  # Заглушка
+    APP_URL = "https://Darkecho-1.github.io/Job_bot/webapp/index.html"
 
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(
