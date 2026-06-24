@@ -3,44 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JobBot Wallet</title>
+    <title>JobBot</title>
     <style>
-        /* ===== БАЗОВЫЕ НАСТРОЙКИ ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* ===== БАЗА ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', 'Satoshi', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
             background: #0B0C0F;
             color: #FFFFFF;
             min-height: 100vh;
             padding: 20px 16px 100px;
-            position: relative;
         }
-
-        /* Мягкий радиальный градиент в верхней части */
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.06) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* ===== КОНТЕЙНЕРЫ ===== */
-        .container {
-            max-width: 420px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
+        .container { max-width: 420px; margin: 0 auto; }
 
         /* ===== ХЕДЕР ===== */
         .header {
@@ -49,24 +23,17 @@
             align-items: center;
             padding: 6px 0 20px;
         }
-
         .header h1 {
             font-size: 22px;
             font-weight: 700;
             background: linear-gradient(135deg, #00F0FF, #0088FF);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
         }
-
-        .header-actions {
-            display: flex;
-            gap: 12px;
-        }
-
+        .header-actions { display: flex; gap: 12px; }
         .header-btn {
             background: #14161D;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255,255,255,0.06);
             border-radius: 14px;
             padding: 8px 12px;
             color: #7D8293;
@@ -74,189 +41,97 @@
             cursor: pointer;
             transition: all 0.2s;
         }
+        .header-btn:hover { background: #1a1d28; border-color: rgba(0,240,255,0.2); }
 
-        .header-btn:hover {
-            background: #1a1d28;
-            border-color: rgba(0, 240, 255, 0.2);
-        }
-
-        /* ===== КАРТОЧКА БАЛАНСА ===== */
-        .balance-card {
+        /* ===== КАРТОЧКА ПРОФИЛЯ ===== */
+        .profile-card {
             background: #14161D;
             border-radius: 20px;
-            padding: 24px 20px 20px;
+            padding: 20px;
             margin-bottom: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
         }
-
-        .balance-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(0, 240, 255, 0.05) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .balance-label {
-            font-size: 13px;
-            color: #7D8293;
-            letter-spacing: 0.5px;
-            font-weight: 500;
-            text-transform: uppercase;
-        }
-
-        .balance-amount {
-            font-size: 36px;
-            font-weight: 700;
-            color: #FFFFFF;
-            margin: 6px 0 4px;
-            letter-spacing: -1px;
-        }
-
-        .balance-amount span {
+        .profile-card .name {
             font-size: 20px;
-            font-weight: 500;
-            color: #7D8293;
-            margin-left: 4px;
+            font-weight: 700;
         }
-
-        .balance-change {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+        .profile-card .detail {
+            color: #7D8293;
             font-size: 14px;
-            font-weight: 600;
+            margin-top: 4px;
+        }
+        .profile-card .badge {
+            display: inline-block;
             padding: 4px 12px;
             border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        .badge.worker { background: rgba(0, 240, 255, 0.15); color: #00F0FF; }
+        .badge.employer { background: rgba(16, 185, 129, 0.15); color: #10B981; }
+        .badge.premium { background: rgba(255, 215, 0, 0.15); color: #F9CA24; }
+        .badge.banned { background: rgba(239, 68, 68, 0.15); color: #EF4444; }
+
+        /* ===== СТАТИСТИКА ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .stat-item {
+            background: #14161D;
+            border-radius: 16px;
+            padding: 16px 10px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .stat-item .num {
+            font-size: 22px;
+            font-weight: 700;
+            color: #00F0FF;
+        }
+        .stat-item .label {
+            font-size: 11px;
+            color: #7D8293;
             margin-top: 4px;
         }
 
-        .balance-change.positive {
-            color: #10B981;
-            background: rgba(16, 185, 129, 0.12);
-        }
-
-        .balance-change.negative {
-            color: #EF4444;
-            background: rgba(239, 68, 68, 0.12);
-        }
-
-        .balance-change .arrow {
-            font-size: 12px;
-        }
-
-        /* ===== СЕТКА БЫСТРЫХ ДЕЙСТВИЙ ===== */
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 28px;
-        }
-
-        .quick-action {
-            background: #14161D;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 16px 6px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.25s;
-            position: relative;
-        }
-
-        .quick-action:hover {
-            background: #1a1d28;
-            border-color: rgba(0, 240, 255, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .quick-action .icon {
-            font-size: 26px;
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        .quick-action .label {
-            font-size: 11px;
-            color: #7D8293;
-            font-weight: 500;
-        }
-
-        .quick-action .badge {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            background: #00F0FF;
-            color: #0B0C0F;
-            font-size: 9px;
-            font-weight: 700;
-            padding: 1px 8px;
-            border-radius: 12px;
-        }
-
-        /* ===== ЗАГОЛОВОК РАЗДЕЛА ===== */
+        /* ===== СПИСОК ВАКАНСИЙ ===== */
         .section-title {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 14px;
         }
-
-        .section-title h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #FFFFFF;
-        }
-
+        .section-title h3 { font-size: 16px; font-weight: 600; }
         .section-title a {
             font-size: 13px;
             color: #7D8293;
-            text-decoration: none;
-            font-weight: 500;
             cursor: pointer;
+            text-decoration: none;
         }
+        .section-title a:hover { color: #00F0FF; }
 
-        .section-title a:hover {
-            color: #00F0FF;
-        }
-
-        /* ===== СПИСОК ТОКЕНОВ / ВАКАНСИЙ ===== */
-        .token-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 28px;
-        }
-
-        .token-item {
+        .vacancy-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+        .vacancy-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
             background: #14161D;
             border-radius: 16px;
             padding: 14px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255,255,255,0.04);
             cursor: pointer;
             transition: all 0.2s;
         }
-
-        .token-item:hover {
+        .vacancy-item:hover {
             background: #1a1d28;
-            border-color: rgba(0, 240, 255, 0.08);
+            border-color: rgba(0,240,255,0.08);
         }
-
-        .token-info {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .token-icon {
+        .vacancy-info { display: flex; align-items: center; gap: 14px; }
+        .vacancy-icon {
             width: 44px;
             height: 44px;
             border-radius: 14px;
@@ -264,51 +139,53 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
             color: #0B0C0F;
             font-weight: 700;
             flex-shrink: 0;
         }
+        .vacancy-icon.physical { background: linear-gradient(135deg, #FF6B6B, #EE5A24); }
+        .vacancy-icon.online { background: linear-gradient(135deg, #10B981, #059669); }
+        .vacancy-icon.both { background: linear-gradient(135deg, #8B5CF6, #6D28D9); }
 
-        .token-icon.premium {
-            background: linear-gradient(135deg, #FF6B6B, #EE5A24);
+        .vacancy-name { font-size: 15px; font-weight: 600; }
+        .vacancy-sub { font-size: 12px; color: #7D8293; margin-top: 2px; }
+        .vacancy-salary { text-align: right; }
+        .vacancy-salary .amount { font-size: 15px; font-weight: 600; }
+        .vacancy-salary .city { font-size: 12px; color: #7D8293; }
+
+        /* ===== БЫСТРЫЕ ДЕЙСТВИЯ ===== */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
         }
-
-        .token-icon.vip {
-            background: linear-gradient(135deg, #F9CA24, #F0932B);
+        .quick-action {
+            background: #14161D;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 14px 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s;
         }
-
-        .token-name {
-            font-size: 15px;
-            font-weight: 600;
+        .quick-action:hover {
+            background: #1a1d28;
+            border-color: rgba(0,240,255,0.15);
+            transform: translateY(-2px);
         }
-
-        .token-sub {
-            font-size: 12px;
-            color: #7D8293;
-            margin-top: 2px;
-        }
-
-        .token-balance {
-            text-align: right;
-        }
-
-        .token-balance .amount {
-            font-size: 15px;
-            font-weight: 600;
-        }
-
-        .token-balance .change {
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .token-balance .change.positive {
-            color: #10B981;
-        }
-
-        .token-balance .change.negative {
-            color: #EF4444;
+        .quick-action .icon { font-size: 24px; display: block; margin-bottom: 4px; }
+        .quick-action .label { font-size: 11px; color: #7D8293; }
+        .quick-action .badge {
+            background: #00F0FF;
+            color: #0B0C0F;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 1px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 4px;
         }
 
         /* ===== КНОПКА ===== */
@@ -323,18 +200,25 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.25s;
-            margin-bottom: 20px;
-            letter-spacing: 0.3px;
         }
+        .btn-primary:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(0,240,255,0.2); }
 
-        .btn-primary:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+        /* ===== ЗАГРУЗЧИК ===== */
+        .loader {
+            text-align: center;
+            color: #7D8293;
+            padding: 40px 0;
         }
-
-        .btn-primary:active {
-            transform: scale(0.98);
+        .loader .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #14161D;
+            border-top-color: #00F0FF;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* ===== НИЖНЯЯ НАВИГАЦИЯ ===== */
         .bottom-nav {
@@ -343,15 +227,12 @@
             left: 0;
             right: 0;
             background: #0B0C0F;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255,255,255,0.05);
             display: flex;
             justify-content: space-around;
             padding: 8px 0 12px;
-            z-index: 100;
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
         }
-
         .nav-item {
             display: flex;
             flex-direction: column;
@@ -360,236 +241,295 @@
             font-size: 10px;
             color: #7D8293;
             cursor: pointer;
-            padding: 4px 16px;
-            border-radius: 12px;
-            transition: all 0.2s;
-            border: none;
+            padding: 4px 12px;
             background: transparent;
+            border: none;
             font-family: inherit;
         }
+        .nav-item .nav-icon { font-size: 22px; }
+        .nav-item.active { color: #00F0FF; }
 
-        .nav-item .nav-icon {
-            font-size: 22px;
-            line-height: 1;
-        }
-
-        .nav-item.active {
-            color: #00F0FF;
-        }
-
-        .nav-item.active .nav-icon {
-            filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.3));
-        }
-
-        .nav-item:hover {
-            color: #FFFFFF;
-        }
-
-        /* ===== АДАПТИВНОСТЬ ===== */
         @media (max-width: 400px) {
-            .balance-amount {
-                font-size: 28px;
-            }
-            .quick-actions {
-                gap: 8px;
-            }
-            .quick-action {
-                padding: 12px 4px;
-            }
-            .quick-action .icon {
-                font-size: 22px;
-            }
+            .quick-actions { gap: 8px; }
+            .quick-action { padding: 12px 4px; }
+            .quick-action .icon { font-size: 20px; }
+            .stats-grid { gap: 8px; }
+            .stat-item .num { font-size: 18px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-
-        <!-- ===== ХЕДЕР ===== -->
-        <div class="header">
-            <h1>JobBot</h1>
-            <div class="header-actions">
-                <button class="header-btn" onclick="refreshData()">🔄</button>
-                <button class="header-btn" onclick="showAlert('⚙️ Настройки')">⚙️</button>
-            </div>
+    <div class="container" id="app">
+        <!-- Загрузчик -->
+        <div class="loader" id="loader">
+            <div class="spinner"></div>
+            <p>Загрузка данных...</p>
         </div>
 
-        <!-- ===== КАРТОЧКА БАЛАНСА ===== -->
-        <div class="balance-card">
-            <div class="balance-label">💰 Баланс</div>
-            <div class="balance-amount" id="balanceAmount">0 <span>₽</span></div>
-            <div class="balance-change positive" id="balanceChange">
-                <span class="arrow">↑</span> +0% за месяц
+        <!-- Основной контент (скрыт изначально) -->
+        <div id="content" style="display: none;">
+
+            <!-- ХЕДЕР -->
+            <div class="header">
+                <h1>JobBot</h1>
+                <div class="header-actions">
+                    <button class="header-btn" onclick="refreshData()">🔄</button>
+                    <button class="header-btn" onclick="openFullApp()">⚙️</button>
+                </div>
             </div>
+
+            <!-- КАРТОЧКА ПРОФИЛЯ -->
+            <div class="profile-card" id="profileCard">
+                <div class="name" id="userName">Пользователь</div>
+                <div class="detail" id="userPhone">📞 Не указан</div>
+                <div class="detail" id="userCity">📍 Не указан</div>
+                <span class="badge" id="userBadge">👤 Соискатель</span>
+            </div>
+
+            <!-- СТАТИСТИКА -->
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="num" id="statVacancies">0</div>
+                    <div class="label">Вакансий</div>
+                </div>
+                <div class="stat-item">
+                    <div class="num" id="statApplications">0</div>
+                    <div class="label">Откликов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="num" id="statSubscriptions">0</div>
+                    <div class="label">Подписка</div>
+                </div>
+            </div>
+
+            <!-- БЫСТРЫЕ ДЕЙСТВИЯ -->
+            <div class="quick-actions">
+                <div class="quick-action" onclick="openInBot('find')">
+                    <span class="icon">🔍</span>
+                    <span class="label">Поиск</span>
+                </div>
+                <div class="quick-action" onclick="openInBot('applications')">
+                    <span class="icon">📋</span>
+                    <span class="label">Отклики</span>
+                    <span class="badge" id="appBadge">0</span>
+                </div>
+                <div class="quick-action" onclick="openInBot('subscription')">
+                    <span class="icon">💎</span>
+                    <span class="label">Подписка</span>
+                    <span class="badge" id="subBadge">FREE</span>
+                </div>
+                <div class="quick-action" onclick="openInBot('profile')">
+                    <span class="icon">👤</span>
+                    <span class="label">Профиль</span>
+                </div>
+            </div>
+
+            <!-- СПИСОК ВАКАНСИЙ -->
+            <div class="section-title">
+                <h3>🔥 Активные вакансии</h3>
+                <a onclick="openInBot('find')">Смотреть все</a>
+            </div>
+            <div class="vacancy-list" id="vacancyList">
+                <!-- Данные загружаются через JS -->
+            </div>
+
+            <button class="btn-primary" onclick="openFullApp()">🚀 Открыть полную версию</button>
         </div>
-
-        <!-- ===== БЫСТРЫЕ ДЕЙСТВИЯ ===== -->
-        <div class="quick-actions">
-            <div class="quick-action" onclick="showAlert('🔍 Найти вакансии')">
-                <span class="icon">🔍</span>
-                <span class="label">Поиск</span>
-            </div>
-            <div class="quick-action" onclick="showAlert('📋 Мои отклики')">
-                <span class="icon">📋</span>
-                <span class="label">Отклики</span>
-                <span class="badge" id="applicationsBadge">3</span>
-            </div>
-            <div class="quick-action" onclick="showAlert('💎 Подписка')">
-                <span class="icon">💎</span>
-                <span class="label">Подписка</span>
-                <span class="badge" id="subscriptionBadge" style="background: #10B981;">PRO</span>
-            </div>
-            <div class="quick-action" onclick="showAlert('👤 Профиль')">
-                <span class="icon">👤</span>
-                <span class="label">Профиль</span>
-            </div>
-        </div>
-
-        <!-- ===== СПИСОК ВАКАНСИЙ ===== -->
-        <div class="section-title">
-            <h3>🔥 Активные вакансии</h3>
-            <a onclick="showAlert('📌 Все вакансии')">Смотреть все</a>
-        </div>
-
-        <div class="token-list" id="vacanciesList">
-            <!-- Данные загружаются через JavaScript -->
-        </div>
-
-        <!-- ===== КНОПКА ===== -->
-        <button class="btn-primary" onclick="showAlert('🚀 Открыть полную версию')">
-            🚀 Открыть полную версию
-        </button>
-
     </div>
 
-    <!-- ===== НИЖНЯЯ НАВИГАЦИЯ ===== -->
+    <!-- НИЖНЯЯ НАВИГАЦИЯ -->
     <div class="bottom-nav">
         <button class="nav-item active" onclick="switchTab('home')">
-            <span class="nav-icon">🏠</span>
-            Главная
+            <span class="nav-icon">🏠</span> Главная
         </button>
-        <button class="nav-item" onclick="switchTab('vacancies')">
-            <span class="nav-icon">📌</span>
-            Вакансии
+        <button class="nav-item" onclick="openInBot('find')">
+            <span class="nav-icon">📌</span> Вакансии
         </button>
-        <button class="nav-item" onclick="showAlert('💬 Чаты')">
-            <span class="nav-icon">💬</span>
-            Чаты
+        <button class="nav-item" onclick="openInBot('applications')">
+            <span class="nav-icon">💬</span> Отклики
         </button>
-        <button class="nav-item" onclick="showAlert('👤 Профиль')">
-            <span class="nav-icon">👤</span>
-            Профиль
+        <button class="nav-item" onclick="openInBot('profile')">
+            <span class="nav-icon">👤</span> Профиль
         </button>
     </div>
 
     <script>
         // ============================================================
-        // 1. ИНИЦИАЛИЗАЦИЯ TELEGRAM WEBAPP
+        // 1. TELEGRAM WEBAPP
         // ============================================================
         let tg = window.Telegram?.WebApp;
-
         if (tg) {
             tg.ready();
-            tg.expand(); // Растягиваем приложение на весь экран
+            tg.expand();
         }
 
         // ============================================================
-        // 2. ДАННЫЕ (СИМУЛЯЦИЯ)
+        // 2. ПОЛУЧЕНИЕ ДАННЫХ ИЗ БОТА
         // ============================================================
-        const userData = {
-            firstName: 'Даниил',
-            lastName: 'Кирсяев',
-            balance: 12450,
-            changePercent: 3.2,
-            applicationsCount: 3,
-            isPremium: true,
-            vacancies: [
-                { id: 1, title: 'Грузчик', company: 'ООО "Логистика"', salary: '2 000–4 000 ₽', type: 'physical',
-                    change: '+12%' },
-                { id: 2, title: 'Python-разработчик', company: 'Digital Agency', salary: '3 500–5 000 ₽', type: 'online',
-                    change: '+8%' },
-                { id: 3, title: 'Курьер', company: 'Служба доставки', salary: '1 800–2 500 ₽', type: 'physical',
-                    change: '-5%' },
-                { id: 4, title: 'Менеджер по продажам', company: 'Торговый дом', salary: '2 200–3 800 ₽', type: 'online',
-                    change: '+15%' },
-                { id: 5, title: 'Промоутер', company: 'Event Company', salary: '1 500–2 000 ₽', type: 'both',
-                change: '+2%' }
-            ]
-        };
+        async function loadData() {
+            try {
+                // Отправляем запрос к боту
+                const response = await fetch('/api/data', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
 
-        // ============================================================
-        // 3. ФУНКЦИИ ДЛЯ ОТОБРАЖЕНИЯ
-        // ============================================================
+                if (!response.ok) throw new Error('Ошибка загрузки');
 
-        // Обновление баланса
-        function updateBalance() {
-            document.getElementById('balanceAmount').innerHTML = `${userData.balance} <span>₽</span>`;
-            const changeEl = document.getElementById('balanceChange');
-            const isPositive = userData.changePercent >= 0;
-            changeEl.className = `balance-change ${isPositive ? 'positive' : 'negative'}`;
-            changeEl.innerHTML = `${isPositive ? '↑' : '↓'} ${Math.abs(userData.changePercent)}% за месяц`;
+                const data = await response.json();
+
+                // Если бот не отвечает (офлайн), используем локальные данные
+                if (data.error) {
+                    console.warn('Бот не отвечает, использую локальные данные');
+                    loadLocalData();
+                    return;
+                }
+
+                renderData(data);
+            } catch (error) {
+                console.error('Ошибка:', error);
+                // Если бот не доступен — локальные данные
+                loadLocalData();
+            }
         }
 
-        // Обновление бейджей
-        function updateBadges() {
-            const badge = document.getElementById('applicationsBadge');
-            if (userData.applicationsCount > 0) {
-                badge.textContent = userData.applicationsCount;
-                badge.style.display = 'inline';
-            } else {
-                badge.style.display = 'none';
+        // ============================================================
+        // 3. ЛОКАЛЬНЫЕ ДАННЫЕ (если бот не отвечает)
+        // ============================================================
+        function loadLocalData() {
+            const localData = {
+                user: {
+                    name: 'Даниил Кирсяев',
+                    phone: '+7 985 261 75 63',
+                    city: 'Москва',
+                    role: 'worker',
+                    is_banned: false
+                },
+                vacancies: [
+                    { id: 1, title: 'Грузчик', salary: '2 000–4 000 ₽', city: 'Москва', type: 'physical',
+                        employer: 'ООО Логистика' },
+                    { id: 2, title: 'Python-разработчик', salary: '3 500–5 000 ₽', city: 'Удаленно', type: 'online',
+                        employer: 'Digital Agency' },
+                    { id: 3, title: 'Курьер', salary: '1 800–2 500 ₽', city: 'Москва', type: 'physical',
+                        employer: 'Служба доставки' },
+                    { id: 4, title: 'Менеджер по продажам', salary: '2 200–3 800 ₽', city: 'Удаленно', type: 'online',
+                        employer: 'Торговый дом' }
+                ],
+                stats: {
+                    applications: 3,
+                    has_subscription: true,
+                    subscription_name: 'Премиум'
+                }
+            };
+            renderData(localData);
+        }
+
+        // ============================================================
+        // 4. ОТОБРАЖЕНИЕ ДАННЫХ
+        // ============================================================
+        function renderData(data) {
+            // Прячем загрузчик, показываем контент
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+
+            // Профиль
+            document.getElementById('userName').textContent = data.user.name || 'Пользователь';
+            document.getElementById('userPhone').textContent = `📞 ${data.user.phone || 'Не указан'}`;
+            document.getElementById('userCity').textContent = `📍 ${data.user.city || 'Не указан'}`;
+
+            // Бейдж роли
+            const badge = document.getElementById('userBadge');
+            const isWorker = data.user.role === 'worker';
+            badge.textContent = isWorker ? '👤 Соискатель' : '🏢 Работодатель';
+            badge.className = `badge ${isWorker ? 'worker' : 'employer'}`;
+
+            if (data.user.is_banned) {
+                badge.textContent += ' 🚫';
+                badge.className = 'badge banned';
             }
 
-            const subBadge = document.getElementById('subscriptionBadge');
-            if (userData.isPremium) {
-                subBadge.textContent = 'PRO';
-                subBadge.style.background = '#10B981';
+            // Статистика
+            document.getElementById('statVacancies').textContent = data.vacancies?.length || 0;
+            document.getElementById('statApplications').textContent = data.stats?.applications || 0;
+            document.getElementById('statSubscriptions').textContent = data.stats?.has_subscription ? '✅ Да' : '❌ Нет';
+
+            // Бейджи
+            document.getElementById('appBadge').textContent = data.stats?.applications || 0;
+            const subBadge = document.getElementById('subBadge');
+            if (data.stats?.has_subscription) {
+                subBadge.textContent = data.stats?.subscription_name || 'PRO';
+                subBadge.style.background = '#F9CA24';
+                subBadge.style.color = '#0B0C0F';
             } else {
                 subBadge.textContent = 'FREE';
                 subBadge.style.background = '#7D8293';
+                subBadge.style.color = '#FFFFFF';
+            }
+
+            // Список вакансий
+            const list = document.getElementById('vacancyList');
+            list.innerHTML = '';
+            if (data.vacancies && data.vacancies.length > 0) {
+                data.vacancies.forEach(vac => {
+                    const item = document.createElement('div');
+                    item.className = 'vacancy-item';
+                    item.onclick = () => showAlert(`📌 ${vac.title}\n🏢 ${vac.employer}\n💰 ${vac.salary}\n📍 ${vac.city}`);
+
+                    const iconMap = {
+                        'physical': '🏢',
+                        'online': '💻',
+                        'both': '🔀'
+                    };
+                    const icon = iconMap[vac.type] || '📌';
+                    const iconClass = `vacancy-icon ${vac.type || 'online'}`;
+
+                    item.innerHTML = `
+                                <div class="vacancy-info">
+                                    <div class="${iconClass}">${icon}</div>
+                                    <div>
+                                        <div class="vacancy-name">${vac.title}</div>
+                                        <div class="vacancy-sub">${vac.employer || 'Без компании'}</div>
+                                    </div>
+                                </div>
+                                <div class="vacancy-salary">
+                                    <div class="amount">${vac.salary}</div>
+                                    <div class="city">📍 ${vac.city || 'Удаленно'}</div>
+                                </div>
+                            `;
+                    list.appendChild(item);
+                });
+            } else {
+                list.innerHTML = '<div class="vacancy-item" style="justify-content:center;color:#7D8293;">📭 Нет активных вакансий</div>';
             }
         }
 
-        // Рендер списка вакансий
-        function renderVacancies() {
-            const container = document.getElementById('vacanciesList');
-            container.innerHTML = '';
+        // ============================================================
+        // 5. ИНТЕРАКЦИИ
+        // ============================================================
 
-            userData.vacancies.forEach(vacancy => {
-                const item = document.createElement('div');
-                item.className = 'token-item';
-                item.onclick = () => showAlert(`📌 ${vacancy.title}\n\n${vacancy.company}\n💰 ${vacancy.salary}`);
-
-                const iconLetter = vacancy.title.charAt(0).toUpperCase();
-                let iconClass = 'token-icon';
-                if (vacancy.type === 'premium') iconClass += ' premium';
-                if (vacancy.type === 'vip') iconClass += ' vip';
-
-                const changeClass = vacancy.change.startsWith('+') ? 'positive' : 'negative';
-
-                item.innerHTML = `
-                            <div class="token-info">
-                                <div class="${iconClass}">${iconLetter}</div>
-                                <div>
-                                    <div class="token-name">${vacancy.title}</div>
-                                    <div class="token-sub">${vacancy.company}</div>
-                                </div>
-                            </div>
-                            <div class="token-balance">
-                                <div class="amount">${vacancy.salary}</div>
-                                <div class="change ${changeClass}">${vacancy.change}</div>
-                            </div>
-                        `;
-                container.appendChild(item);
-            });
+        // Открыть функцию в боте
+        function openInBot(action) {
+            if (tg) {
+                tg.sendData(JSON.stringify({ action: action }));
+                tg.close();
+            } else {
+                // Если не в Telegram, открываем в браузере
+                window.open('https://t.me/ваш_бот_username', '_blank');
+            }
         }
 
-        // ============================================================
-        // 4. ИНТЕРАКЦИИ
-        // ============================================================
+        // Открыть полную версию (в боте)
+        function openFullApp() {
+            if (tg) {
+                tg.sendData(JSON.stringify({ action: 'open_full' }));
+                tg.close();
+            } else {
+                window.open('https://t.me/ваш_бот_username', '_blank');
+            }
+        }
 
-        // Показать уведомление (связь с Telegram или alert)
+        // Показать уведомление
         function showAlert(message) {
             if (tg) {
                 tg.showAlert(message);
@@ -598,70 +538,35 @@
             }
         }
 
-        // Обновить данные (симуляция)
+        // Обновить данные
         function refreshData() {
-            // Имитация обновления
-            const newBalance = Math.floor(Math.random() * 5000) + 10000;
-            userData.balance = newBalance;
-            userData.changePercent = (Math.random() * 10 - 2);
-            userData.applicationsCount = Math.floor(Math.random() * 5);
-
-            updateBalance();
-            updateBadges();
-
-            if (tg) {
-                tg.showAlert('✅ Данные обновлены!');
-            } else {
-                alert('✅ Данные обновлены!');
-            }
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('content').style.display = 'none';
+            loadData();
+            if (tg) tg.showAlert('✅ Данные обновлены!');
         }
 
-        // Переключение вкладок (симуляция)
+        // Переключение вкладок
         function switchTab(tab) {
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(item => item.classList.remove('active'));
-
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             if (tab === 'home') {
-                navItems[0].classList.add('active');
-                showAlert('🏠 Главная');
+                document.querySelector('.nav-item:first-child').classList.add('active');
             } else if (tab === 'vacancies') {
-                navItems[1].classList.add('active');
-                showAlert('📌 Все вакансии');
-            }
-        }
-
-        // Получение данных пользователя из Telegram WebApp
-        function loadUserFromTelegram() {
-            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                const tgUser = tg.initDataUnsafe.user;
-                if (tgUser.first_name) {
-                    userData.firstName = tgUser.first_name;
-                    userData.lastName = tgUser.last_name || '';
-                    // Можно обновить приветствие, если нужно
-                }
+                document.querySelectorAll('.nav-item')[1].classList.add('active');
+                openInBot('find');
+            } else if (tab === 'applications') {
+                document.querySelectorAll('.nav-item')[2].classList.add('active');
+                openInBot('applications');
+            } else {
+                document.querySelectorAll('.nav-item')[3].classList.add('active');
+                openInBot('profile');
             }
         }
 
         // ============================================================
-        // 5. ЗАПУСК
+        // 6. ЗАПУСК
         // ============================================================
-
-        function init() {
-            loadUserFromTelegram();
-            updateBalance();
-            updateBadges();
-            renderVacancies();
-
-            // Подписка на изменение темы Telegram (если нужно)
-            if (tg && tg.onEvent) {
-                tg.onEvent('themeChanged', function() {
-                    // Можно адаптировать цвета под тему Telegram
-                    // но мы используем фиксированную тёмную тему
-                });
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded', loadData);
     </script>
 
 </body>
