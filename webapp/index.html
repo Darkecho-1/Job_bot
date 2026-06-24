@@ -2,223 +2,666 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobBot App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JobBot Wallet</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ===== БАЗОВЫЕ НАСТРОЙКИ ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: #0f0f1a;
-            color: #ffffff;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', 'Satoshi', sans-serif;
+            background: #0B0C0F;
+            color: #FFFFFF;
             min-height: 100vh;
+            padding: 20px 16px 100px;
+            position: relative;
         }
+
+        /* Мягкий радиальный градиент в верхней части */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===== КОНТЕЙНЕРЫ ===== */
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== ХЕДЕР ===== */
         .header {
-            text-align: center;
-            padding: 20px 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0 20px;
         }
+
         .header h1 {
-            font-size: 28px;
-            background: linear-gradient(135deg, #4a6cf7, #6a3de8);
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00F0FF, #0088FF);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
         }
-        .header p {
-            color: #8892a8;
-            font-size: 14px;
-        }
-        .menu-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+
+        .header-actions {
+            display: flex;
             gap: 12px;
-            max-width: 400px;
-            margin: 0 auto;
         }
-        .menu-item {
-            background: #1a1a2e;
+
+        .header-btn {
+            background: #14161D;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 14px;
-            padding: 18px 14px;
+            padding: 8px 12px;
+            color: #7D8293;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .header-btn:hover {
+            background: #1a1d28;
+            border-color: rgba(0, 240, 255, 0.2);
+        }
+
+        /* ===== КАРТОЧКА БАЛАНСА ===== */
+        .balance-card {
+            background: #14161D;
+            border-radius: 20px;
+            padding: 24px 20px 20px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .balance-label {
+            font-size: 13px;
+            color: #7D8293;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .balance-amount {
+            font-size: 36px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin: 6px 0 4px;
+            letter-spacing: -1px;
+        }
+
+        .balance-amount span {
+            font-size: 20px;
+            font-weight: 500;
+            color: #7D8293;
+            margin-left: 4px;
+        }
+
+        .balance-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-top: 4px;
+        }
+
+        .balance-change.positive {
+            color: #10B981;
+            background: rgba(16, 185, 129, 0.12);
+        }
+
+        .balance-change.negative {
+            color: #EF4444;
+            background: rgba(239, 68, 68, 0.12);
+        }
+
+        .balance-change .arrow {
+            font-size: 12px;
+        }
+
+        /* ===== СЕТКА БЫСТРЫХ ДЕЙСТВИЙ ===== */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .quick-action {
+            background: #14161D;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 16px 6px;
             text-align: center;
-            border: 1px solid #2a2a44;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            transition: all 0.25s;
+            position: relative;
+        }
+
+        .quick-action:hover {
+            background: #1a1d28;
+            border-color: rgba(0, 240, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .quick-action .icon {
+            font-size: 26px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .quick-action .label {
+            font-size: 11px;
+            color: #7D8293;
+            font-weight: 500;
+        }
+
+        .quick-action .badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: #00F0FF;
+            color: #0B0C0F;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 1px 8px;
+            border-radius: 12px;
+        }
+
+        /* ===== ЗАГОЛОВОК РАЗДЕЛА ===== */
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .section-title h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #FFFFFF;
+        }
+
+        .section-title a {
+            font-size: 13px;
+            color: #7D8293;
+            text-decoration: none;
+            font-weight: 500;
             cursor: pointer;
         }
-        .menu-item:hover {
-            background: #252545;
-            transform: translateY(-2px);
-            border-color: #4a6cf7;
+
+        .section-title a:hover {
+            color: #00F0FF;
         }
-        .menu-item .icon {
-            font-size: 28px;
-            display: block;
-            margin-bottom: 8px;
+
+        /* ===== СПИСОК ТОКЕНОВ / ВАКАНСИЙ ===== */
+        .token-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 28px;
         }
-        .menu-item .label {
-            font-size: 13px;
-            color: #ccd6f6;
+
+        .token-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #14161D;
+            border-radius: 16px;
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            cursor: pointer;
+            transition: all 0.2s;
         }
-        .menu-item .badge {
-            background: #4a6cf7;
-            color: white;
-            font-size: 10px;
-            padding: 2px 10px;
-            border-radius: 12px;
-            display: inline-block;
-            margin-top: 6px;
+
+        .token-item:hover {
+            background: #1a1d28;
+            border-color: rgba(0, 240, 255, 0.08);
         }
+
+        .token-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .token-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #00F0FF, #0088FF);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #0B0C0F;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .token-icon.premium {
+            background: linear-gradient(135deg, #FF6B6B, #EE5A24);
+        }
+
+        .token-icon.vip {
+            background: linear-gradient(135deg, #F9CA24, #F0932B);
+        }
+
+        .token-name {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .token-sub {
+            font-size: 12px;
+            color: #7D8293;
+            margin-top: 2px;
+        }
+
+        .token-balance {
+            text-align: right;
+        }
+
+        .token-balance .amount {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .token-balance .change {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .token-balance .change.positive {
+            color: #10B981;
+        }
+
+        .token-balance .change.negative {
+            color: #EF4444;
+        }
+
+        /* ===== КНОПКА ===== */
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #00F0FF, #0088FF);
+            border: none;
+            border-radius: 16px;
+            color: #0B0C0F;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-bottom: 20px;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        /* ===== НИЖНЯЯ НАВИГАЦИЯ ===== */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: #1a1a2e;
-            border-top: 1px solid #2a2a44;
+            background: #0B0C0F;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
+            padding: 8px 0 12px;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
+
         .nav-item {
-            text-align: center;
-            font-size: 12px;
-            color: #8892a8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            font-size: 10px;
+            color: #7D8293;
             cursor: pointer;
-            padding: 4px 12px;
-        }
-        .nav-item.active {
-            color: #4a6cf7;
-        }
-        .nav-item .nav-icon {
-            font-size: 20px;
-            display: block;
-        }
-        .profile-card {
-            background: #1a1a2e;
-            border-radius: 14px;
-            padding: 20px;
-            margin: 10px 0 20px;
-            border: 1px solid #2a2a44;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .profile-card .name {
-            font-size: 18px;
-            font-weight: 600;
-        }
-        .profile-card .detail {
-            color: #8892a8;
-            font-size: 13px;
-            margin-top: 4px;
-        }
-        .profile-card .status {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-top: 8px;
-            background: #4a6cf7;
-            color: white;
-        }
-        .btn {
-            background: #4a6cf7;
-            color: white;
+            padding: 4px 16px;
+            border-radius: 12px;
+            transition: all 0.2s;
             border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-size: 16px;
-            width: 100%;
-            cursor: pointer;
-            transition: background 0.3s;
-            max-width: 400px;
-            margin: 10px auto;
-            display: block;
+            background: transparent;
+            font-family: inherit;
         }
-        .btn:hover {
-            background: #3a5cd9;
+
+        .nav-item .nav-icon {
+            font-size: 22px;
+            line-height: 1;
         }
-        @media (max-width: 480px) {
-            .menu-grid { gap: 8px; }
-            .menu-item { padding: 14px 10px; }
+
+        .nav-item.active {
+            color: #00F0FF;
+        }
+
+        .nav-item.active .nav-icon {
+            filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.3));
+        }
+
+        .nav-item:hover {
+            color: #FFFFFF;
+        }
+
+        /* ===== АДАПТИВНОСТЬ ===== */
+        @media (max-width: 400px) {
+            .balance-amount {
+                font-size: 28px;
+            }
+            .quick-actions {
+                gap: 8px;
+            }
+            .quick-action {
+                padding: 12px 4px;
+            }
+            .quick-action .icon {
+                font-size: 22px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>🚀 JobBot</h1>
-        <p>Платформа для поиска работы</p>
+    <div class="container">
+
+        <!-- ===== ХЕДЕР ===== -->
+        <div class="header">
+            <h1>JobBot</h1>
+            <div class="header-actions">
+                <button class="header-btn" onclick="refreshData()">🔄</button>
+                <button class="header-btn" onclick="showAlert('⚙️ Настройки')">⚙️</button>
+            </div>
+        </div>
+
+        <!-- ===== КАРТОЧКА БАЛАНСА ===== -->
+        <div class="balance-card">
+            <div class="balance-label">💰 Баланс</div>
+            <div class="balance-amount" id="balanceAmount">0 <span>₽</span></div>
+            <div class="balance-change positive" id="balanceChange">
+                <span class="arrow">↑</span> +0% за месяц
+            </div>
+        </div>
+
+        <!-- ===== БЫСТРЫЕ ДЕЙСТВИЯ ===== -->
+        <div class="quick-actions">
+            <div class="quick-action" onclick="showAlert('🔍 Найти вакансии')">
+                <span class="icon">🔍</span>
+                <span class="label">Поиск</span>
+            </div>
+            <div class="quick-action" onclick="showAlert('📋 Мои отклики')">
+                <span class="icon">📋</span>
+                <span class="label">Отклики</span>
+                <span class="badge" id="applicationsBadge">3</span>
+            </div>
+            <div class="quick-action" onclick="showAlert('💎 Подписка')">
+                <span class="icon">💎</span>
+                <span class="label">Подписка</span>
+                <span class="badge" id="subscriptionBadge" style="background: #10B981;">PRO</span>
+            </div>
+            <div class="quick-action" onclick="showAlert('👤 Профиль')">
+                <span class="icon">👤</span>
+                <span class="label">Профиль</span>
+            </div>
+        </div>
+
+        <!-- ===== СПИСОК ВАКАНСИЙ ===== -->
+        <div class="section-title">
+            <h3>🔥 Активные вакансии</h3>
+            <a onclick="showAlert('📌 Все вакансии')">Смотреть все</a>
+        </div>
+
+        <div class="token-list" id="vacanciesList">
+            <!-- Данные загружаются через JavaScript -->
+        </div>
+
+        <!-- ===== КНОПКА ===== -->
+        <button class="btn-primary" onclick="showAlert('🚀 Открыть полную версию')">
+            🚀 Открыть полную версию
+        </button>
+
     </div>
 
-    <div class="profile-card" id="profileCard">
-        <div class="name" id="userName">Пользователь</div>
-        <div class="detail" id="userCity">📍 Город не указан</div>
-        <div class="detail" id="userRole">🎯 Соискатель</div>
-        <span class="status" id="userStatus">Активен</span>
-    </div>
-
-    <div class="menu-grid">
-        <div class="menu-item" onclick="showAlert('🔍 Поиск вакансий')">
-            <span class="icon">🔍</span>
-            <span class="label">Найти вакансии</span>
-        </div>
-        <div class="menu-item" onclick="showAlert('📋 Мои отклики')">
-            <span class="icon">📋</span>
-            <span class="label">Мои отклики</span>
-            <span class="badge">3</span>
-        </div>
-        <div class="menu-item" onclick="showAlert('💎 Подписка')">
-            <span class="icon">💎</span>
-            <span class="label">Подписка</span>
-            <span class="badge">Premium</span>
-        </div>
-        <div class="menu-item" onclick="showAlert('⚙️ Настройки')">
-            <span class="icon">⚙️</span>
-            <span class="label">Настройки</span>
-        </div>
-    </div>
-
-    <button class="btn" onclick="showAlert('🔄 Обновить профиль')">🔄 Обновить профиль</button>
-
+    <!-- ===== НИЖНЯЯ НАВИГАЦИЯ ===== -->
     <div class="bottom-nav">
-        <div class="nav-item active">
+        <button class="nav-item active" onclick="switchTab('home')">
             <span class="nav-icon">🏠</span>
             Главная
-        </div>
-        <div class="nav-item" onclick="showAlert('📋 Вакансии')">
+        </button>
+        <button class="nav-item" onclick="switchTab('vacancies')">
             <span class="nav-icon">📌</span>
             Вакансии
-        </div>
-        <div class="nav-item" onclick="showAlert('💬 Чаты')">
+        </button>
+        <button class="nav-item" onclick="showAlert('💬 Чаты')">
             <span class="nav-icon">💬</span>
             Чаты
-        </div>
-        <div class="nav-item" onclick="showAlert('👤 Профиль')">
+        </button>
+        <button class="nav-item" onclick="showAlert('👤 Профиль')">
             <span class="nav-icon">👤</span>
             Профиль
-        </div>
+        </button>
     </div>
 
     <script>
-        function showAlert(message) {
-            alert('📱 ' + message + '\n\nДанная функция будет доступна в следующей версии приложения!');
+        // ============================================================
+        // 1. ИНИЦИАЛИЗАЦИЯ TELEGRAM WEBAPP
+        // ============================================================
+        let tg = window.Telegram?.WebApp;
+
+        if (tg) {
+            tg.ready();
+            tg.expand(); // Растягиваем приложение на весь экран
         }
 
-        // Имитация загрузки данных пользователя из Telegram WebApp
-        document.addEventListener('DOMContentLoaded', function() {
-            try {
-                if (window.Telegram && window.Telegram.WebApp) {
-                    const user = window.Telegram.WebApp.initDataUnsafe?.user || {};
-                    if (user.first_name) {
-                        document.getElementById('userName').textContent = user.first_name + (user.last_name ? ' ' + user.last_name : '');
-                        document.getElementById('userCity').textContent = '📍 ' + (user.city || 'Город не указан');
-                    }
-                    // Показываем, что WebApp готов
-                    window.Telegram.WebApp.ready();
-                }
-            } catch (e) {
-                console.log('WebApp не инициализирован');
+        // ============================================================
+        // 2. ДАННЫЕ (СИМУЛЯЦИЯ)
+        // ============================================================
+        const userData = {
+            firstName: 'Даниил',
+            lastName: 'Кирсяев',
+            balance: 12450,
+            changePercent: 3.2,
+            applicationsCount: 3,
+            isPremium: true,
+            vacancies: [
+                { id: 1, title: 'Грузчик', company: 'ООО "Логистика"', salary: '2 000–4 000 ₽', type: 'physical',
+                    change: '+12%' },
+                { id: 2, title: 'Python-разработчик', company: 'Digital Agency', salary: '3 500–5 000 ₽', type: 'online',
+                    change: '+8%' },
+                { id: 3, title: 'Курьер', company: 'Служба доставки', salary: '1 800–2 500 ₽', type: 'physical',
+                    change: '-5%' },
+                { id: 4, title: 'Менеджер по продажам', company: 'Торговый дом', salary: '2 200–3 800 ₽', type: 'online',
+                    change: '+15%' },
+                { id: 5, title: 'Промоутер', company: 'Event Company', salary: '1 500–2 000 ₽', type: 'both',
+                change: '+2%' }
+            ]
+        };
+
+        // ============================================================
+        // 3. ФУНКЦИИ ДЛЯ ОТОБРАЖЕНИЯ
+        // ============================================================
+
+        // Обновление баланса
+        function updateBalance() {
+            document.getElementById('balanceAmount').innerHTML = `${userData.balance} <span>₽</span>`;
+            const changeEl = document.getElementById('balanceChange');
+            const isPositive = userData.changePercent >= 0;
+            changeEl.className = `balance-change ${isPositive ? 'positive' : 'negative'}`;
+            changeEl.innerHTML = `${isPositive ? '↑' : '↓'} ${Math.abs(userData.changePercent)}% за месяц`;
+        }
+
+        // Обновление бейджей
+        function updateBadges() {
+            const badge = document.getElementById('applicationsBadge');
+            if (userData.applicationsCount > 0) {
+                badge.textContent = userData.applicationsCount;
+                badge.style.display = 'inline';
+            } else {
+                badge.style.display = 'none';
             }
-        });
+
+            const subBadge = document.getElementById('subscriptionBadge');
+            if (userData.isPremium) {
+                subBadge.textContent = 'PRO';
+                subBadge.style.background = '#10B981';
+            } else {
+                subBadge.textContent = 'FREE';
+                subBadge.style.background = '#7D8293';
+            }
+        }
+
+        // Рендер списка вакансий
+        function renderVacancies() {
+            const container = document.getElementById('vacanciesList');
+            container.innerHTML = '';
+
+            userData.vacancies.forEach(vacancy => {
+                const item = document.createElement('div');
+                item.className = 'token-item';
+                item.onclick = () => showAlert(`📌 ${vacancy.title}\n\n${vacancy.company}\n💰 ${vacancy.salary}`);
+
+                const iconLetter = vacancy.title.charAt(0).toUpperCase();
+                let iconClass = 'token-icon';
+                if (vacancy.type === 'premium') iconClass += ' premium';
+                if (vacancy.type === 'vip') iconClass += ' vip';
+
+                const changeClass = vacancy.change.startsWith('+') ? 'positive' : 'negative';
+
+                item.innerHTML = `
+                            <div class="token-info">
+                                <div class="${iconClass}">${iconLetter}</div>
+                                <div>
+                                    <div class="token-name">${vacancy.title}</div>
+                                    <div class="token-sub">${vacancy.company}</div>
+                                </div>
+                            </div>
+                            <div class="token-balance">
+                                <div class="amount">${vacancy.salary}</div>
+                                <div class="change ${changeClass}">${vacancy.change}</div>
+                            </div>
+                        `;
+                container.appendChild(item);
+            });
+        }
+
+        // ============================================================
+        // 4. ИНТЕРАКЦИИ
+        // ============================================================
+
+        // Показать уведомление (связь с Telegram или alert)
+        function showAlert(message) {
+            if (tg) {
+                tg.showAlert(message);
+            } else {
+                alert(message);
+            }
+        }
+
+        // Обновить данные (симуляция)
+        function refreshData() {
+            // Имитация обновления
+            const newBalance = Math.floor(Math.random() * 5000) + 10000;
+            userData.balance = newBalance;
+            userData.changePercent = (Math.random() * 10 - 2);
+            userData.applicationsCount = Math.floor(Math.random() * 5);
+
+            updateBalance();
+            updateBadges();
+
+            if (tg) {
+                tg.showAlert('✅ Данные обновлены!');
+            } else {
+                alert('✅ Данные обновлены!');
+            }
+        }
+
+        // Переключение вкладок (симуляция)
+        function switchTab(tab) {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+
+            if (tab === 'home') {
+                navItems[0].classList.add('active');
+                showAlert('🏠 Главная');
+            } else if (tab === 'vacancies') {
+                navItems[1].classList.add('active');
+                showAlert('📌 Все вакансии');
+            }
+        }
+
+        // Получение данных пользователя из Telegram WebApp
+        function loadUserFromTelegram() {
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                const tgUser = tg.initDataUnsafe.user;
+                if (tgUser.first_name) {
+                    userData.firstName = tgUser.first_name;
+                    userData.lastName = tgUser.last_name || '';
+                    // Можно обновить приветствие, если нужно
+                }
+            }
+        }
+
+        // ============================================================
+        // 5. ЗАПУСК
+        // ============================================================
+
+        function init() {
+            loadUserFromTelegram();
+            updateBalance();
+            updateBadges();
+            renderVacancies();
+
+            // Подписка на изменение темы Telegram (если нужно)
+            if (tg && tg.onEvent) {
+                tg.onEvent('themeChanged', function() {
+                    // Можно адаптировать цвета под тему Telegram
+                    // но мы используем фиксированную тёмную тему
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 
 </body>
