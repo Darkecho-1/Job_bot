@@ -4,30 +4,34 @@ from aiogram.filters import Command
 
 router = Router()
 
+# Ссылка на мини-приложение (замените на свою)
+APP_URL = "https://Darkecho-1.github.io/Job_bot/webapp/index.html"
 
+@router.message(Command("app"))
 async def open_webapp(message: Message):
-    """Открывает мини-приложение"""
-    # ВАЖНО: замените URL на ваш реальный адрес, где будет hosted index.html
-    # Например: https://ваш-сайт.com/app
-    # Или для локального теста можно использовать ngrok
-    APP_URL = "https://Darkecho-1.github.io/Job_bot/webapp/index.html"
-
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(
             text="🚀 Открыть приложение",
             web_app=WebAppInfo(url=APP_URL)
         )]
     ])
-
     await message.answer(
-        "📱 <b>Наше приложение</b>\n\n"
-        "Нажмите на кнопку, чтобы открыть мини-приложение.\n"
-        "В нём вы можете управлять своим профилем, искать вакансии и многое другое!",
+        "📱 <b>Мини-приложение JobBot</b>\n\n"
+        "Нажмите на кнопку, чтобы открыть.\n"
+        "Здесь вы можете управлять профилем, искать вакансии и общаться.",
         reply_markup=keyboard,
         parse_mode="HTML"
     )
 
-
-@router.message(Command("app"))
-async def app_command(message: Message):
-    await open_webapp(message)
+async def open_webapp_from_menu(message: Message):
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(
+            text="🚀 Открыть приложение",
+            web_app=WebAppInfo(url=APP_URL)
+        )]
+    ])
+    await message.answer(
+        "📱 <b>Мини-приложение</b>",
+        reply_markup=keyboard,
+        parse_mode="HTML"
+    )

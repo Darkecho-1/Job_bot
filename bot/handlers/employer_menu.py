@@ -90,8 +90,18 @@ async def employer_applications(message: Message):
             has_applications = True
             text += f"📌 <b>{vac.title}</b> (ID: {vac.id})\n"
             for app in apps:
-                worker = await get_user_by_telegram_id(app.worker_id)
-                worker_name = worker.first_name or worker.username or "Без имени"
+                # ✅ ПРАВИЛЬНО получаем соискателя по его внутреннему ID
+                async with async_session_maker() as session:
+                    worker_result = await session.execute(
+                        select(User).where(User.id == app.worker_id)
+                    )
+                    worker = worker_result.scalar_one_or_none()
+
+                if worker:
+                    worker_name = worker.first_name or worker.username or "Без имени"
+                else:
+                    worker_name = "❌ Пользователь удалён"
+
                 status_ru = {
                     "pending": "⏳ Ожидает",
                     "accepted": "✅ Принят",

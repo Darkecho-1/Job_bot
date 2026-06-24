@@ -5,222 +5,187 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>JobBot</title>
     <style>
-        /* ===== БАЗА ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
             background: #0B0C0F;
             color: #FFFFFF;
             min-height: 100vh;
-            padding: 20px 16px 100px;
+            padding: 16px 12px 90px;
         }
         .container { max-width: 420px; margin: 0 auto; }
 
-        /* ===== ХЕДЕР ===== */
+        /* ХЕДЕР */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 6px 0 20px;
+            padding: 4px 0 16px;
         }
         .header h1 {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             background: linear-gradient(135deg, #00F0FF, #0088FF);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .header-actions { display: flex; gap: 12px; }
+        .header-actions { display: flex; gap: 10px; }
         .header-btn {
             background: #14161D;
             border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 14px;
-            padding: 8px 12px;
+            border-radius: 12px;
+            padding: 6px 12px;
             color: #7D8293;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
-            transition: all 0.2s;
         }
-        .header-btn:hover { background: #1a1d28; border-color: rgba(0,240,255,0.2); }
 
-        /* ===== КАРТОЧКА ПРОФИЛЯ ===== */
+        /* КАРТОЧКА ПРОФИЛЯ */
         .profile-card {
             background: #14161D;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 24px;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
             border: 1px solid rgba(255,255,255,0.05);
         }
-        .profile-card .name {
-            font-size: 20px;
-            font-weight: 700;
-        }
-        .profile-card .detail {
-            color: #7D8293;
-            font-size: 14px;
-            margin-top: 4px;
-        }
+        .profile-card .name { font-size: 18px; font-weight: 700; }
+        .profile-card .detail { color: #7D8293; font-size: 13px; margin-top: 2px; }
         .profile-card .badge {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 3px 12px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
-            margin-top: 8px;
+            margin-top: 6px;
         }
-        .badge.worker { background: rgba(0, 240, 255, 0.15); color: #00F0FF; }
-        .badge.employer { background: rgba(16, 185, 129, 0.15); color: #10B981; }
-        .badge.premium { background: rgba(255, 215, 0, 0.15); color: #F9CA24; }
-        .badge.banned { background: rgba(239, 68, 68, 0.15); color: #EF4444; }
+        .badge.worker { background: rgba(0,240,255,0.12); color: #00F0FF; }
+        .badge.employer { background: rgba(16,185,129,0.12); color: #10B981; }
+        .badge.banned { background: rgba(239,68,68,0.12); color: #EF4444; }
 
-        /* ===== СТАТИСТИКА ===== */
+        /* СТАТИСТИКА */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 24px;
+            gap: 10px;
+            margin-bottom: 16px;
         }
         .stat-item {
             background: #14161D;
-            border-radius: 16px;
-            padding: 16px 10px;
+            border-radius: 14px;
+            padding: 14px 8px;
             text-align: center;
             border: 1px solid rgba(255,255,255,0.04);
         }
-        .stat-item .num {
-            font-size: 22px;
-            font-weight: 700;
-            color: #00F0FF;
+        .stat-item .num { font-size: 20px; font-weight: 700; color: #00F0FF; }
+        .stat-item .label { font-size: 10px; color: #7D8293; margin-top: 2px; }
+
+        /* БЫСТРЫЕ ДЕЙСТВИЯ */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
         }
-        .stat-item .label {
-            font-size: 11px;
-            color: #7D8293;
-            margin-top: 4px;
+        .quick-action {
+            background: #14161D;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 14px;
+            padding: 12px 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .quick-action:active { transform: scale(0.95); }
+        .quick-action .icon { font-size: 22px; display: block; }
+        .quick-action .label { font-size: 10px; color: #7D8293; margin-top: 2px; }
+        .quick-action .badge {
+            background: #00F0FF;
+            color: #0B0C0F;
+            font-size: 8px;
+            font-weight: 700;
+            padding: 1px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 2px;
         }
 
-        /* ===== СПИСОК ВАКАНСИЙ ===== */
+        /* СПИСОК ВАКАНСИЙ */
         .section-title {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
-        .section-title h3 { font-size: 16px; font-weight: 600; }
-        .section-title a {
-            font-size: 13px;
-            color: #7D8293;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .section-title a:hover { color: #00F0FF; }
+        .section-title h3 { font-size: 15px; font-weight: 600; }
+        .section-title a { font-size: 12px; color: #7D8293; cursor: pointer; }
 
-        .vacancy-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+        .vacancy-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
         .vacancy-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
             background: #14161D;
-            border-radius: 16px;
-            padding: 14px 16px;
+            border-radius: 14px;
+            padding: 12px 14px;
             border: 1px solid rgba(255,255,255,0.04);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: 0.2s;
         }
-        .vacancy-item:hover {
-            background: #1a1d28;
-            border-color: rgba(0,240,255,0.08);
-        }
-        .vacancy-info { display: flex; align-items: center; gap: 14px; }
+        .vacancy-item:active { transform: scale(0.98); background: #1a1d28; }
+        .vacancy-info { display: flex; align-items: center; gap: 12px; }
         .vacancy-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #00F0FF, #0088FF);
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            color: #0B0C0F;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-        .vacancy-icon.physical { background: linear-gradient(135deg, #FF6B6B, #EE5A24); }
-        .vacancy-icon.online { background: linear-gradient(135deg, #10B981, #059669); }
-        .vacancy-icon.both { background: linear-gradient(135deg, #8B5CF6, #6D28D9); }
-
-        .vacancy-name { font-size: 15px; font-weight: 600; }
-        .vacancy-sub { font-size: 12px; color: #7D8293; margin-top: 2px; }
-        .vacancy-salary { text-align: right; }
-        .vacancy-salary .amount { font-size: 15px; font-weight: 600; }
-        .vacancy-salary .city { font-size: 12px; color: #7D8293; }
-
-        /* ===== БЫСТРЫЕ ДЕЙСТВИЯ ===== */
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-        .quick-action {
-            background: #14161D;
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 14px 6px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.25s;
-        }
-        .quick-action:hover {
-            background: #1a1d28;
-            border-color: rgba(0,240,255,0.15);
-            transform: translateY(-2px);
-        }
-        .quick-action .icon { font-size: 24px; display: block; margin-bottom: 4px; }
-        .quick-action .label { font-size: 11px; color: #7D8293; }
-        .quick-action .badge {
-            background: #00F0FF;
-            color: #0B0C0F;
-            font-size: 9px;
-            font-weight: 700;
-            padding: 1px 8px;
-            border-radius: 12px;
-            display: inline-block;
-            margin-top: 4px;
-        }
-
-        /* ===== КНОПКА ===== */
-        .btn-primary {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #00F0FF, #0088FF);
-            border: none;
-            border-radius: 16px;
-            color: #0B0C0F;
             font-size: 16px;
             font-weight: 700;
-            cursor: pointer;
-            transition: all 0.25s;
+            flex-shrink: 0;
+            color: #0B0C0F;
         }
-        .btn-primary:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(0,240,255,0.2); }
+        .vacancy-icon.online { background: linear-gradient(135deg, #00F0FF, #0088FF); }
+        .vacancy-icon.physical { background: linear-gradient(135deg, #FF6B6B, #EE5A24); }
+        .vacancy-icon.both { background: linear-gradient(135deg, #8B5CF6, #6D28D9); }
+        .vacancy-name { font-size: 14px; font-weight: 600; }
+        .vacancy-sub { font-size: 11px; color: #7D8293; }
+        .vacancy-salary { text-align: right; }
+        .vacancy-salary .amount { font-size: 14px; font-weight: 600; }
+        .vacancy-salary .city { font-size: 11px; color: #7D8293; }
 
-        /* ===== ЗАГРУЗЧИК ===== */
+        /* КНОПКА */
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #00F0FF, #0088FF);
+            border: none;
+            border-radius: 14px;
+            color: #0B0C0F;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn-primary:active { transform: scale(0.97); }
+
+        /* ЗАГРУЗЧИК */
         .loader {
             text-align: center;
             color: #7D8293;
-            padding: 40px 0;
+            padding: 60px 0;
         }
         .loader .spinner {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border: 3px solid #14161D;
             border-top-color: #00F0FF;
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            animation: spin 0.7s linear infinite;
             margin: 0 auto 12px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ===== НИЖНЯЯ НАВИГАЦИЯ ===== */
+        /* НАВИГАЦИЯ */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -230,15 +195,15 @@
             border-top: 1px solid rgba(255,255,255,0.05);
             display: flex;
             justify-content: space-around;
-            padding: 8px 0 12px;
+            padding: 6px 0 10px;
             backdrop-filter: blur(12px);
         }
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2px;
-            font-size: 10px;
+            gap: 1px;
+            font-size: 9px;
             color: #7D8293;
             cursor: pointer;
             padding: 4px 12px;
@@ -246,15 +211,18 @@
             border: none;
             font-family: inherit;
         }
-        .nav-item .nav-icon { font-size: 22px; }
+        .nav-item .nav-icon { font-size: 20px; }
         .nav-item.active { color: #00F0FF; }
 
-        @media (max-width: 400px) {
-            .quick-actions { gap: 8px; }
-            .quick-action { padding: 12px 4px; }
-            .quick-action .icon { font-size: 20px; }
-            .stats-grid { gap: 8px; }
-            .stat-item .num { font-size: 18px; }
+        /* ОШИБКА */
+        .error-box {
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            color: #EF4444;
+            margin: 20px 0;
         }
     </style>
 </head>
@@ -267,24 +235,22 @@
             <p>Загрузка данных...</p>
         </div>
 
-        <!-- Основной контент (скрыт изначально) -->
+        <!-- Контент -->
         <div id="content" style="display: none;">
-
             <!-- ХЕДЕР -->
             <div class="header">
                 <h1>JobBot</h1>
                 <div class="header-actions">
                     <button class="header-btn" onclick="refreshData()">🔄</button>
-                    <button class="header-btn" onclick="openFullApp()">⚙️</button>
                 </div>
             </div>
 
-            <!-- КАРТОЧКА ПРОФИЛЯ -->
+            <!-- ПРОФИЛЬ -->
             <div class="profile-card" id="profileCard">
-                <div class="name" id="userName">Пользователь</div>
-                <div class="detail" id="userPhone">📞 Не указан</div>
-                <div class="detail" id="userCity">📍 Не указан</div>
-                <span class="badge" id="userBadge">👤 Соискатель</span>
+                <div class="name" id="userName">Загрузка...</div>
+                <div class="detail" id="userPhone">📞 Загрузка...</div>
+                <div class="detail" id="userCity">📍 Загрузка...</div>
+                <span class="badge" id="userBadge">👤 Загрузка...</span>
             </div>
 
             <!-- СТАТИСТИКА -->
@@ -298,7 +264,7 @@
                     <div class="label">Откликов</div>
                 </div>
                 <div class="stat-item">
-                    <div class="num" id="statSubscriptions">0</div>
+                    <div class="num" id="statSubscription">❌</div>
                     <div class="label">Подписка</div>
                 </div>
             </div>
@@ -325,20 +291,20 @@
                 </div>
             </div>
 
-            <!-- СПИСОК ВАКАНСИЙ -->
+            <!-- ВАКАНСИИ -->
             <div class="section-title">
                 <h3>🔥 Активные вакансии</h3>
                 <a onclick="openInBot('find')">Смотреть все</a>
             </div>
             <div class="vacancy-list" id="vacancyList">
-                <!-- Данные загружаются через JS -->
+                <div style="text-align:center;color:#7D8293;padding:20px 0;">Загрузка вакансий...</div>
             </div>
 
-            <button class="btn-primary" onclick="openFullApp()">🚀 Открыть полную версию</button>
+            <button class="btn-primary" onclick="openInBot('full')">🚀 Открыть бота</button>
         </div>
     </div>
 
-    <!-- НИЖНЯЯ НАВИГАЦИЯ -->
+    <!-- НАВИГАЦИЯ -->
     <div class="bottom-nav">
         <button class="nav-item active" onclick="switchTab('home')">
             <span class="nav-icon">🏠</span> Главная
@@ -369,96 +335,86 @@
         // ============================================================
         async function loadData() {
             try {
+                // Получаем токен пользователя через WebApp
+                const initData = tg ? tg.initData : '';
+
                 // Отправляем запрос к боту
                 const response = await fetch('/api/data', {
                     method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Telegram-WebApp-Init-Data': initData
+                    }
                 });
 
                 if (!response.ok) throw new Error('Ошибка загрузки');
 
                 const data = await response.json();
 
-                // Если бот не отвечает (офлайн), используем локальные данные
                 if (data.error) {
-                    console.warn('Бот не отвечает, использую локальные данные');
-                    loadLocalData();
-                    return;
+                    throw new Error(data.error);
                 }
 
                 renderData(data);
             } catch (error) {
                 console.error('Ошибка:', error);
-                // Если бот не доступен — локальные данные
-                loadLocalData();
+                // Показываем сообщение об ошибке
+                document.getElementById('loader').innerHTML = `
+                    <div class="error-box">
+                        ❌ Не удалось загрузить данные<br>
+                        <small>Проверьте подключение к боту</small>
+                        <br><br>
+                        <button onclick="loadData()" style="background:#00F0FF;border:none;padding:8px 20px;border-radius:8px;font-weight:700;cursor:pointer;">Повторить</button>
+                    </div>
+                `;
             }
         }
 
         // ============================================================
-        // 3. ЛОКАЛЬНЫЕ ДАННЫЕ (если бот не отвечает)
-        // ============================================================
-        function loadLocalData() {
-            const localData = {
-                user: {
-                    name: 'Даниил Кирсяев',
-                    phone: '+7 985 261 75 63',
-                    city: 'Москва',
-                    role: 'worker',
-                    is_banned: false
-                },
-                vacancies: [
-                    { id: 1, title: 'Грузчик', salary: '2 000–4 000 ₽', city: 'Москва', type: 'physical',
-                        employer: 'ООО Логистика' },
-                    { id: 2, title: 'Python-разработчик', salary: '3 500–5 000 ₽', city: 'Удаленно', type: 'online',
-                        employer: 'Digital Agency' },
-                    { id: 3, title: 'Курьер', salary: '1 800–2 500 ₽', city: 'Москва', type: 'physical',
-                        employer: 'Служба доставки' },
-                    { id: 4, title: 'Менеджер по продажам', salary: '2 200–3 800 ₽', city: 'Удаленно', type: 'online',
-                        employer: 'Торговый дом' }
-                ],
-                stats: {
-                    applications: 3,
-                    has_subscription: true,
-                    subscription_name: 'Премиум'
-                }
-            };
-            renderData(localData);
-        }
-
-        // ============================================================
-        // 4. ОТОБРАЖЕНИЕ ДАННЫХ
+        // 3. ОТОБРАЖЕНИЕ ДАННЫХ
         // ============================================================
         function renderData(data) {
-            // Прячем загрузчик, показываем контент
+            // Прячем загрузчик
             document.getElementById('loader').style.display = 'none';
             document.getElementById('content').style.display = 'block';
 
+            const user = data.user || {};
+            const stats = data.stats || {};
+            const vacancies = data.vacancies || [];
+            const applications = data.applications || [];
+            const subscription = data.subscription || {};
+
             // Профиль
-            document.getElementById('userName').textContent = data.user.name || 'Пользователь';
-            document.getElementById('userPhone').textContent = `📞 ${data.user.phone || 'Не указан'}`;
-            document.getElementById('userCity').textContent = `📍 ${data.user.city || 'Не указан'}`;
+            document.getElementById('userName').textContent = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+            document.getElementById('userPhone').textContent = `📞 ${user.phone || 'Не указан'}`;
+            document.getElementById('userCity').textContent = `📍 ${user.city || 'Не указан'}`;
 
-            // Бейдж роли
+            // Бейдж
             const badge = document.getElementById('userBadge');
-            const isWorker = data.user.role === 'worker';
-            badge.textContent = isWorker ? '👤 Соискатель' : '🏢 Работодатель';
-            badge.className = `badge ${isWorker ? 'worker' : 'employer'}`;
-
-            if (data.user.is_banned) {
-                badge.textContent += ' 🚫';
+            if (user.is_banned) {
+                badge.textContent = '🚫 Заблокирован';
                 badge.className = 'badge banned';
+            } else if (user.role === 'worker') {
+                badge.textContent = '👤 Соискатель';
+                badge.className = 'badge worker';
+            } else if (user.role === 'employer') {
+                badge.textContent = '🏢 Работодатель';
+                badge.className = 'badge employer';
+            } else {
+                badge.textContent = '❌ Не зарегистрирован';
+                badge.className = 'badge';
             }
 
             // Статистика
-            document.getElementById('statVacancies').textContent = data.vacancies?.length || 0;
-            document.getElementById('statApplications').textContent = data.stats?.applications || 0;
-            document.getElementById('statSubscriptions').textContent = data.stats?.has_subscription ? '✅ Да' : '❌ Нет';
+            document.getElementById('statVacancies').textContent = stats.vacancies_count || vacancies.length;
+            document.getElementById('statApplications').textContent = stats.applications_count || applications.length;
+            document.getElementById('statSubscription').textContent = subscription.is_active ? '✅' : '❌';
 
             // Бейджи
-            document.getElementById('appBadge').textContent = data.stats?.applications || 0;
+            document.getElementById('appBadge').textContent = stats.applications_count || 0;
             const subBadge = document.getElementById('subBadge');
-            if (data.stats?.has_subscription) {
-                subBadge.textContent = data.stats?.subscription_name || 'PRO';
+            if (subscription.is_active) {
+                subBadge.textContent = subscription.name || 'PRO';
                 subBadge.style.background = '#F9CA24';
                 subBadge.style.color = '#0B0C0F';
             } else {
@@ -470,80 +426,82 @@
             // Список вакансий
             const list = document.getElementById('vacancyList');
             list.innerHTML = '';
-            if (data.vacancies && data.vacancies.length > 0) {
-                data.vacancies.forEach(vac => {
-                    const item = document.createElement('div');
-                    item.className = 'vacancy-item';
-                    item.onclick = () => showAlert(`📌 ${vac.title}\n🏢 ${vac.employer}\n💰 ${vac.salary}\n📍 ${vac.city}`);
 
-                    const iconMap = {
-                        'physical': '🏢',
-                        'online': '💻',
-                        'both': '🔀'
-                    };
-                    const icon = iconMap[vac.type] || '📌';
-                    const iconClass = `vacancy-icon ${vac.type || 'online'}`;
-
-                    item.innerHTML = `
-                                <div class="vacancy-info">
-                                    <div class="${iconClass}">${icon}</div>
-                                    <div>
-                                        <div class="vacancy-name">${vac.title}</div>
-                                        <div class="vacancy-sub">${vac.employer || 'Без компании'}</div>
-                                    </div>
-                                </div>
-                                <div class="vacancy-salary">
-                                    <div class="amount">${vac.salary}</div>
-                                    <div class="city">📍 ${vac.city || 'Удаленно'}</div>
-                                </div>
-                            `;
-                    list.appendChild(item);
-                });
-            } else {
-                list.innerHTML = '<div class="vacancy-item" style="justify-content:center;color:#7D8293;">📭 Нет активных вакансий</div>';
+            if (vacancies.length === 0) {
+                list.innerHTML = '<div style="text-align:center;color:#7D8293;padding:20px 0;">📭 Нет активных вакансий</div>';
+                return;
             }
+
+            vacancies.forEach(vac => {
+                const item = document.createElement('div');
+                item.className = 'vacancy-item';
+
+                // Показываем полную информацию при клике
+                item.onclick = () => {
+                    const msg = `📌 ${vac.title}\n🏢 ID: ${vac.employer_id}\n💰 ${vac.salary}\n📍 ${vac.city}\n\n📝 ${vac.description || 'Описание отсутствует'}`;
+                    if (tg) tg.showAlert(msg);
+                    else alert(msg);
+                };
+
+                const iconMap = {
+                    'online': '💻',
+                    'physical': '🏢',
+                    'both': '🔀'
+                };
+                const icon = iconMap[vac.type] || '📌';
+                const iconClass = `vacancy-icon ${vac.type || 'online'}`;
+
+                item.innerHTML = `
+                    <div class="vacancy-info">
+                        <div class="${iconClass}">${icon}</div>
+                        <div>
+                            <div class="vacancy-name">${vac.title}</div>
+                            <div class="vacancy-sub">📍 ${vac.city || 'Удаленно'}</div>
+                        </div>
+                    </div>
+                    <div class="vacancy-salary">
+                        <div class="amount">${vac.salary}</div>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
         }
 
         // ============================================================
-        // 5. ИНТЕРАКЦИИ
+        // 4. ИНТЕРАКЦИИ
         // ============================================================
 
         // Открыть функцию в боте
         function openInBot(action) {
+            const messages = {
+                'find': '🔍 Ищем вакансии...',
+                'applications': '📋 Переходим к откликам...',
+                'subscription': '💎 Открываем подписку...',
+                'profile': '👤 Открываем профиль...',
+                'full': '🚀 Открываем бота...'
+            };
+
             if (tg) {
                 tg.sendData(JSON.stringify({ action: action }));
-                tg.close();
+                tg.showAlert(messages[action] || 'Выполняем действие...');
+                tg.close(); // Закрываем приложение и переходим в бота
             } else {
-                // Если не в Telegram, открываем в браузере
+                // Если вне Telegram — просто показываем уведомление
+                alert(messages[action] || 'Действие выполнено');
                 window.open('https://t.me/ваш_бот_username', '_blank');
-            }
-        }
-
-        // Открыть полную версию (в боте)
-        function openFullApp() {
-            if (tg) {
-                tg.sendData(JSON.stringify({ action: 'open_full' }));
-                tg.close();
-            } else {
-                window.open('https://t.me/ваш_бот_username', '_blank');
-            }
-        }
-
-        // Показать уведомление
-        function showAlert(message) {
-            if (tg) {
-                tg.showAlert(message);
-            } else {
-                alert(message);
             }
         }
 
         // Обновить данные
         function refreshData() {
-            document.getElementById('loader').style.display = 'block';
             document.getElementById('content').style.display = 'none';
-            loadData();
-            if (tg) tg.showAlert('✅ Данные обновлены!');
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('loader').innerHTML = `
+                <div class="spinner"></div>
+                <p>Обновление данных...</p>
+            `;
+            if (tg) tg.showAlert('🔄 Данные обновляются...');
+            setTimeout(loadData, 500);
         }
 
         // Переключение вкладок
@@ -551,22 +509,21 @@
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             if (tab === 'home') {
                 document.querySelector('.nav-item:first-child').classList.add('active');
-            } else if (tab === 'vacancies') {
-                document.querySelectorAll('.nav-item')[1].classList.add('active');
-                openInBot('find');
-            } else if (tab === 'applications') {
-                document.querySelectorAll('.nav-item')[2].classList.add('active');
-                openInBot('applications');
-            } else {
-                document.querySelectorAll('.nav-item')[3].classList.add('active');
-                openInBot('profile');
             }
         }
 
         // ============================================================
-        // 6. ЗАПУСК
+        // 5. ЗАПУСК
         // ============================================================
-        document.addEventListener('DOMContentLoaded', loadData);
+        document.addEventListener('DOMContentLoaded', function() {
+            // Если есть данные от Telegram — сразу загружаем
+            if (tg && tg.initData) {
+                loadData();
+            } else {
+                // Если нет — пробуем загрузить через 1 секунду
+                setTimeout(loadData, 1000);
+            }
+        });
     </script>
 
 </body>

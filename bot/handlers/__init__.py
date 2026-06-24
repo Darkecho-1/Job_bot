@@ -3,8 +3,9 @@ from . import registration
 from . import admin
 from . import employer_menu
 from . import worker_menu
+from . import subscription
 from . import vacancy_creation
 from . import vacancy_matching
 from . import payments
-from . import subscription
 from . import webapp
+from . import webapp_data

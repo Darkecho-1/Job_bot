@@ -47,3 +47,9 @@ async def force_menu(message: Message):
         else:
             from bot.handlers.employer_menu import employer_menu
             await employer_menu(message, user)
+
+
+@router.message(Command("getdata"))
+async def test_get_data(message: Message):
+    from bot.handlers.webapp_data import send_app_data
+    await send_app_data(message)

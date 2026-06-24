@@ -13,6 +13,8 @@ from bot.middlewares.throttling import ThrottlingMiddleware
 from bot.middlewares.activity_logger import ActivityLoggerMiddleware
 from bot.middlewares.role_check import RoleCheckMiddleware
 from bot.handlers import webapp
+from bot.handlers import webapp_api
+from bot.handlers import webapp_data
 
 
 async def setup_dispatcher():
@@ -45,5 +47,7 @@ async def setup_dispatcher():
     dp.include_router(payments.router)
     dp.include_router(subscription.router)
     dp.include_router(webapp.router)
+    dp.include_router(webapp_api.router)
+    dp.include_router(webapp_data.router)
 
     return dp, bot
